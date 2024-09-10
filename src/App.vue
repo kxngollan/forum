@@ -1,26 +1,49 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <PostBox @refetch-posts="fetchPosts" />
+    <PostSection class="mt-2 h-screen" @refetch-posts="fetchPosts" :posts="posts" :loading="loading" :err="err" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import PostBox from './components/PostBox.vue';
+import PostSection from './components/PostSection.vue';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+    components: {
+        PostBox, PostSection
+    }, data() {
+        return {
+            posts: [],
+            loading: true,
+            err: ""
+        }
+    },
+    methods: {
+        async fetchPosts() {
+            try {
+                const res = await fetch("https://vue-twitter-a0868-default-rtdb.firebaseio.com/post.json")
+                if (!res.ok) {
+                    throw new Error({ message: "Failed to fetch" })
+                }
+                const data = await res.json()
+                const results = []
+                for (const id in data) {
+                    results.push({
+                        id: id,
+                        post: data[id].post,
+                        username: data[id].username
+                    })
+                }
+                this.posts = results.reverse()
+            } catch (error) {
+                console.error(error)
+                this.err = "Failed to fetch"
+            } finally {
+                this.loading = false
+            }
+        }
+    },
+    mounted() {
+        this.fetchPosts()
+    }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
