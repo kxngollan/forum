@@ -60,8 +60,10 @@ export default {
         <div v-if="loading" class="flex w-full h-full justify-center items-center">
             <div class="loader"></div>
         </div>
-        <div v-else-if="!loading && (!posts || posts.length === 0) && !err">
-            No Comments. Please add one.
+        <div v-else-if="!loading && (!posts || posts.length === 0) && !err" class="flex justify-center">
+            <h3 class="text-bold">
+                No Posts. Be the first
+            </h3>
         </div>
         <div v-else-if="!loading && posts.length > 0">
             <div v-for="(post, i) in posts" :key="i" class="flex justify-between items-center mb-3 rounded-md">

@@ -5,11 +5,13 @@ export default {
         return {
             post: "",
             username: "",
+            err: "",
             sending: false
         };
     },
     methods: {
         async onSend() {
+            this.err = ""
             this.sending = true;
             const trimmedPost = this.post.trim();
             const trimmedUsername = this.username.trim();
@@ -19,7 +21,7 @@ export default {
                     throw new Error("Both sections (post and username) must be filled");
                 }
 
-                const res = await fetch("https://vue-twitter-a0868-default-rtdb.firebaseio.com/post.json", {
+                const res = await fetch("https://vue-witter-a0868-default-rtdb.firebaseio.com/post.json", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -39,7 +41,9 @@ export default {
                 this.$emit("refetch-posts");
 
             } catch (err) {
-                console.error(err.post);
+                console.error(err.message);
+                this.err = err.message;
+                console.log(this.err)
             } finally {
                 this.sending = false;
             }
@@ -53,12 +57,13 @@ export default {
         class="flex items-center justify-center space-x-3 p-4 border rounded-lg shadow-sm mx-auto max-w-screen-sm">
         <img src="https://via.placeholder.com/50" alt="Profile Picture" class="w-10 h-10 rounded-full object-cover" />
 
-        <div class="flex flex-col justify-center items-center w-full">
+        <div class="flex flex-col justify-center items-center w-full ">
             <input class="p-2 focus:outline-none w-full" type="text" placeholder="Enter Username" v-model="username"
                 :disabled="sending" />
-            <textarea type="text" placeholder="What is on your mind?"
+            <input type="text" placeholder="What is on your mind?"
                 class="resize-none flex-grow p-2 text-gray-700 placeholder-gray-400 focus:outline-none w-full"
-                v-model="post" :disabled="sending"></textarea>
+                v-model="post" :disabled="sending"></input>
+            <p v-if="err" class="bg-red-600 rounded p-1 text-white">{{ err }}</p>
         </div>
 
         <button
