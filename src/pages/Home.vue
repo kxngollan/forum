@@ -47,7 +47,7 @@ export default {
 </script>
             
 <template>
-    <main class="flex justify-start gap-1">
+    <main class="flex justify-center gap-1">
         <!-- <Sidebar /> -->
         <section>
             <PostBox @refetch-posts="fetchPosts" />

@@ -21,7 +21,7 @@ export default {
                     throw new Error("Both sections (post and username) must be filled");
                 }
 
-                const res = await fetch("https://vue-witter-a0868-default-rtdb.firebaseio.com/post.json", {
+                const res = await fetch("https://vue-twitter-a0868-default-rtdb.firebaseio.com/post.json", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
